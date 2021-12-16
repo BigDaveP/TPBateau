@@ -1,5 +1,8 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
+  "allowSyntheticDefaultImports": true,
+  "strictPropertyInitialization": false,
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
@@ -27,6 +30,8 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": false
   }
 }

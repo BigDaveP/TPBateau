@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Document</title>
+</head>
+<body class="bg-light">
+<div class="col-sm-4 bg-light">
+  <label for="firstName" class="form-label">Modèle</label>
+  <input type="text" class="form-control" id="BoatModel" placeholder="" value="" (change)="getBateau($event)" required >
+    <p class="mt-3" *ngIf="isSearchCorrect false">La valeur entrée ne retourne aucune information...</p>
+</div>
+<div class="m-2" style="max-height: 300px; overflow: auto; max-width: 400px">
+  <button id="btnBateauChoix" style="width: 175px; height: 75px" type="button"  class="btn btn-primary m-1" href="#" *ngFor="let bateau of bateaux" (click)="clickBateau(bateau.ref)">{{bateau.name}}</button>
+</div>
+
+<div class="col-sm-4">
+  <label for="lastName" class="form-label">Longueur (en mètre)</label>
+  <div class="input-group">
+    <input type="text" class="form-control" id="BoatLength" placeholder="" value="{{longueur}}" required>
+    <span class="input-group-text">mètres</span>
+  </div>
+  <div class="invalid-feedback">
+    La longueur est requise.
+  </div>
+</div>
+<hr class="my-4">
+<div class="d-flex">
+  <div class="col-3">
+    <h5>Les grands-voiles</h5>
+    <label for="gvl" class="form-label">grand-voile lattée</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="gvl" placeholder="" value="{{gvl}}" [(ngModel)]="gvl" >
+      <span class="input-group-text">m2</span>
+    </div>
+    <label for="gvsl" class="form-label">grand-voile semi-lattée</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="gvsl" placeholder=""  value="{{gvsl}}" [(ngModel)]="gvsl">
+      <span class="input-group-text">m2</span>
+    </div>
+    <label for="gve" class="form-label">grand-voile sur enrouleur</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="gve" placeholder="" value="{{gve}}"[(ngModel)]="gve">
+      <span class="input-group-text">m2</span>
+    </div>
+  </div>
+  <div class="col-3 ms-4">
+    <h5>Les voiles d'avant</h5>
+    <label for="gm" class="form-label">génois sur mousquetons</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="gm" placeholder="" value="{{gm}}" [(ngModel)]="gm">
+      <span class="input-group-text">m2</span>
+    </div>
+    <label for="gve" class="form-label">génois sur enrouleur</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="ge" placeholder="" value="{{ge}}"[(ngModel)]="ge">
+      <span class="input-group-text">m2</span>
+    </div>
+  </div>
+  <div class="col-3 ms-4">
+    <h5>Les voiles de portant</h5>
+    <label for="ss" class="form-label">spi symétrique</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="ss" placeholder="" value="{{ss}}"[(ngModel)]="ss">
+      <span class="input-group-text">m2</span>
+    </div>
+    <label for="sa" class="form-label">spi asymétrique</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="sa" placeholder="" value="{{sa}}"[(ngModel)]="sa">
+      <span class="input-group-text">m2</span>
+    </div>
+    <label for="gs" class="form-label">gennaker / code 0</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="gs" placeholder="" value="{{gs}}"[(ngModel)]="gs">
+      <span class="input-group-text">m2</span>
+    </div>
+  </div>
+
+  <div class="col-3 ms-4">
+    <h5>Accessoires</h5>
+    <label for="access" class="form-label">longueur de la bôme</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="access" placeholder="" value="0" >
+      <span class="input-group-text">m2</span>
+    </div>
+  </div>
+
+</div>
+<div class="col-md-12 text-center d-flex justify-content-start mt-3">
+  <button class="btn btn-sm btn-warning " (click)="validerMesure($event)">valider mes mesures</button>
+</div>
+<p *ngIf="isCorrect">Certaines valeurs sont invalides...</p>
+<div class="col-12" >
+  <ul class="nav nav-tabs">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="gv-tab" data-bs-toggle="tab" data-bs-target="#tab-gv" type="button" role="tab" aria-controls="gv" aria-selected="true">Grands-voiles</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="ge-tab" data-bs-toggle="tab" data-bs-target="#tab-ge" type="button" role="tab" aria-controls="ge" aria-selected="true">Voiles d'avant</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="spi-tab" data-bs-toggle="tab" data-bs-target="#tab-spi" type="button" role="tab" aria-controls="spi" aria-selected="true">Voiles de portant</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="access-tab" data-bs-toggle="tab" data-bs-target="#tab-access" type="button" role="tab" aria-controls="access" aria-selected="true">Accessoires</button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="tab-sails">
+      <div class="tab-pane fade show active" id="tab-gv" role="tabpanel" aria-labelledby="gv-tab" >
+        <div class="row"><p></p></div>
+
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[0]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[0]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[0]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+      <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[1]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[1]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[1]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[2]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[2]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[2]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">        <div class="row">
+        <h6 [innerHTML]="nameVoile[3]"></h6>
+        <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+        <div class="col-md-6">
+          <p [innerHTML]="description[3]"></p>
+        </div>
+        <div class="col-md-3">À partir de <span [innerHTML]="prix[3]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+        <hr>
+      </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[4]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[4]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[4]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[5]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[5]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[5]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[6]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[6]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[6]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[7]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[7]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[7]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[8]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[8]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[8]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[9]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[9]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[9]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[10]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[10]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[10]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[11]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[11]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[11]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[12]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[12]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[12]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[13]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[13]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[13]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[14]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[14]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[14]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[15]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[15]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[15]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[16]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[16]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[16]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[17]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[17]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[17]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[18]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[18]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[18]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[19]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[19]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[19]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[20]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[20]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[20]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[21]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[21]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[21]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[22]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[22]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[22]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+          <h6 [innerHTML]="nameVoile[23]"></h6>
+          <img src="./assets/gvl.png" class="col-md-3 img-responsive">
+          <div class="col-md-6">
+            <p [innerHTML]="description[23]"></p>
+          </div>
+          <div class="col-md-3">À partir de <span [innerHTML]="prix[23]"></span> $ <button class="btn btn-primary">Configurer</button></div>
+          <hr>
+        </div>
+
+
+
+
+    </div>
+    <div class="tab-pane fade show " id="tab-ge" role="tabpanel" aria-labelledby="ge-tab"></div>
+    <div class="tab-pane fade show " id="tab-spi" role="tabpanel" aria-labelledby="spi-tab"></div>
+    <div class="tab-pane fade show " id="tab-access" role="tabpanel" aria-labelledby="access-tab"></div>
+  </div>
+</div>
+</body>
+</html>
+
+
